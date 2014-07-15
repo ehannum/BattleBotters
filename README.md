@@ -11,11 +11,22 @@ Your only interface with the world will be the menu for creating your bot the re
 
 =============
 
+HOW TO PLAY:
+
+By default, your bot is set up to do 2 things:
+1. Walk forward.
+2. Tell you how it dies.
+
+Figure it out from there. That's the whole point.
+
+=============
+
 PLANNED FEATURES:
 
  - The game. Right now it doesn't exist.
+ - Leveling up your bot to handle more actions.
  - Playerless Player vs Player!
- - No Player Multiplayer!
+ - Multi-"Player"!
  - Epic Challenges you can't see!
  - Fast-forwarding to points of progress you've already reached with a previous bot.
  - CSS(?)
