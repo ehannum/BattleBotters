@@ -10,6 +10,8 @@ form {
   padding: 1%;
 }
 
+
+
 .col2 {
   min-height: 40%;
   display: inline-block;
@@ -26,4 +28,8 @@ form {
   color: #0F0;
   font-family: courier, serif;
   font-size: 1.1rem;
+}
+
+.play {
+  line-height: 0;
 }
