@@ -1,16 +1,29 @@
 html, body {
   min-height: 100% !important;
   height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  border: 1px solid black;
+  padding: 1%;
 }
 
 .col2 {
   min-height: 40%;
   display: inline-block;
-  width: 46%;
+  width: 47%;
+  margin: 1%;
 }
 
 .console {
+  margin: 1%;
   min-height: 40%;
   border: 1px solid black;
   overflow-y: auto;
+  background-color: black;
+  color: #0F0;
+  font-family: courier, serif;
+  font-size: 1.1rem;
 }

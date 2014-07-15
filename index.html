@@ -7,6 +7,7 @@
   </head>
   <body>
     <div class="col2 actions">
+      Actions:
       <form class="action1">
         When:
         <select class="action1-if">
@@ -18,10 +19,15 @@
         Then:
         <select class="action1-then">
           <option value="walkForward">Walk Forward</option>
+          <option value="die">Kill Self</option>
         </select>
+        <input class="and" type="button" value="And...">
+        <input class="moveup" type="button" value="^">
+        <input class="movedown" type="button" value="v">
       </form>
     </div>
     <div class="col2 reports">
+      Reports:
       <form class="action1">
         When:
         <select class="action1-if">
@@ -31,14 +37,18 @@
         <select class="action1-then">
           <option value="recent-dmg">Damage Source</option>
         </select>
+        <input class="and" type="button" value="And...">
+        <input class="moveup" type="button" value="^">
+        <input class="movedown" type="button" value="v">
       </form>
     </div>
     <div>
       <button class="play"><h1>Make Bot Go Now</h1></button>
     </div>
     <div class="console">
-      
+      <span>SYSTEM: "BattleBotters" v0.0.1 ready...</span>
     </div>
+    <p style="text-align:center;">BattleBotters (c) 2014 Eric Hannum. ehannum@gmail.com</p>
   </body>
   <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="src/game.js"></script>
