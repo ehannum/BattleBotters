@@ -6,16 +6,17 @@ var Guy = function (name) {
   this.name = name || 'Robot-0001';
   this.level = 1;
   this.exp = 0;
+  this.alive = true;
 
   this.brawn = 1;
   this.brains = 1;
   this.grit = 1;
 
-  this.isHuman = false;
-  this.alive = true;
-
   this.health = 20;
-  this.mana = 20;
+  this.mana = 10;
+
+  this.maxHeath = 20;
+  this.maxMana = 10;
 
   // [x, y, direction]
   // direction is for movement and hit testing [-up/+down, -left/+right]
@@ -26,12 +27,37 @@ var Guy = function (name) {
     near: null,
     facing: null
   };
+
+  this.reports = {
+    die: null
+  };
+
+  this.inventory = {
+    healthPotions: 5,
+    weapon: {name: 'Basic Sword', type: 'wep', dmg: 1}
+  };
+
+  this.spellbook = {
+    fireball: {name: 'Fireball', dmg: 2, cost: 2}
+  };
 };
 
 var actions = {
   die: function () {
     guy.alive = false;
+    if (guy.reports.die) guy.reports.die({source: 'yourself'});
+  }
+};
 
+var reports = {
+  dmgSource: function (source) {
+
+  },
+  inventory: function () {
+
+  },
+  health: function () {
+    writeConsole(guy.name.toUpperCase() + ': I have ' + guy.health + '/' + guy.maxHealth + ' HP.');
   }
 };
 
@@ -52,7 +78,6 @@ $('.play').click(function (e) {
   if (guy.alive) return;
 
   guy = new Guy($('.bot-name').val());
-  $('.console').append('<br /><span>SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.</span>');
 
   startGame();
 });
@@ -60,16 +85,22 @@ $('.play').click(function (e) {
 var startGame = function () {
   var mid = Math.floor(world.length/2);
 
+  writeConsole('SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.');
   guy.position = [mid, mid];
 
   setInterval(update, 1000);
 };
 
 var endGame = function () {
+  writeConsole('SYSTEM: Game Over');
   clearInterval(update);
 };
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
   if (guy.always) guy.always();
+};
+
+var writeConsole = function (text) {
+  $('.console').append('<br /><span>' + text + '</span>');
 };
