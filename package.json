@@ -1,0 +1,25 @@
+{
+  "name": "BattleBotters",
+  "version": "0.0.1",
+  "description": "Bots! Battling!",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ehannum/BattleBotters.git"
+  },
+  "keywords": [
+    "game", "bots", "rpg"
+  ],
+  "author": "Eric Hannum",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ehannum/BattleBotters/issues"
+  },
+  "homepage": "https://github.com/ehannum/BattleBotters",
+  "dependencies": {
+    "express": "~4.6.x"
+  }
+}
