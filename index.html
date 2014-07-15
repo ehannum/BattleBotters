@@ -2,10 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Battle Botters! - The MMO you don't even play!</title>
+    <link rel="stylesheet" href="res/styles.css">
+    <title>Battle Botters! - The only MMO with no players! You know, other than Wildstar!</title>
   </head>
   <body>
-    sup dood!
+    <div class="col2 actions">
+      <form class="action1">
+        When:
+        <select class="action1-if">
+          <option value="always">Always</option>
+          <option value="facing">Facing...</option>
+          <option value="near">Near...</option>
+        </select>
+        <span class="specific"></span>
+        Then:
+        <select class="action1-then">
+          <option value="walkForward">Walk Forward</option>
+        </select>
+      </form>
+    </div>
+    <div class="col2 reports">
+      <form class="action1">
+        When:
+        <select class="action1-if">
+          <option value="dead">Dead</option>
+        </select>
+        Report:
+        <select class="action1-then">
+          <option value="recent-dmg">Damage Source</option>
+        </select>
+      </form>
+    </div>
+    <div>
+      <button class="play"><h1>Make Bot Go Now</h1></button>
+    </div>
+    <div class="console">
+      
+    </div>
   </body>
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="src/game.js"></script>
 </html>
