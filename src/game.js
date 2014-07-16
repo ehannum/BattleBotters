@@ -9,7 +9,7 @@ var Guy = function (name) {
   if (name) {
     this.name = name;
   } else {
-    this.name = 'Robo-000' + botCount;
+    this.name = 'Robo-' + ('0000' + botCount).slice(-4);
     botCount++;
   }
 
@@ -56,7 +56,7 @@ var Guy = function (name) {
 
 var actions = {
   die: function () {
-    trigger('die', {source: guy, damage: 'KO'});
+    trigger('die', {source: guy, damage: 'Instant Kill'});
   },
   walkForward: function () {
     guy.position[0] += guy.position[2][0];
@@ -68,13 +68,13 @@ var actions = {
 
 var reports = {
   dmgSource: function (data) {
-    writeConsole(guy.name.toUpperCase() + ': I have taken "' + data.damage + '" damage from "' + data.source.name + '".');
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Took "' + data.damage + '" damage from "' + data.source.name + '".');
   },
   inventory: function () {
 
   },
   health: function () {
-    writeConsole(guy.name.toUpperCase() + ': I have ' + guy.health + '/' + guy.maxHealth + ' HP.');
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Has ' + guy.health + '/' + guy.maxHealth + ' HP.');
   }
 };
 
@@ -88,7 +88,7 @@ var effects = {
   },
   swimming: function () {
     // TODO - replace this with some actual swimming action
-    trigger('die', {damage: 'KO', source: {name: 'drowning'}});
+    trigger('die', {damage: 'Instant Kill', source: {name: 'drowning'}});
   }
 };
 
@@ -160,17 +160,21 @@ var update = function () {
 
   switch (ground) {
     case 0:
+      // normal ground
       break;
     case 1:
+      // water
       trigger('swimming');
       break;
     default:
-      trigger('die', {damage: 'KO', source: {name: 'THE VOID'}});
+      // I don't know where you are
+      trigger('die', {damage: 'Instant Kill', source: {name: 'THE VOID'}});
   }
 };
 
 var writeConsole = function (text) {
   $('.console').append('<br /><span>' + text + '</span>');
+  $('.console').scrollTop($('.console')[0].scrollHeight);
 };
 
 var trigger = function (evt, data) {
@@ -178,4 +182,9 @@ var trigger = function (evt, data) {
   if (effects[evt]) effects[evt](data);
   if (guy.reports[evt]) guy.reports[evt](data);
   if (guy.ai[evt]) guy.ai[evt](data);
+};
+
+var getTimestamp = function () {
+  var date = new Date();
+  return '[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']';
 };
