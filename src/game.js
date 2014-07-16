@@ -3,6 +3,7 @@ console.log('                           11000111 1                           \n 
 var guy = {};
 var gameloop;
 var botCount = 1;
+var currentWorld = [[0]];
 
 var Guy = function (name) {
   if (name) {
@@ -28,6 +29,7 @@ var Guy = function (name) {
 
   // [x, y, direction]
   // direction is for movement and hit testing [-up/+down, -left/+right]
+  // north = [-1. 0], south = [1, 0], west = [0, -1], east = [0, 1]
   this.position = [0, 0, [-1, 0]];
 
   this.ai = {
@@ -54,10 +56,11 @@ var Guy = function (name) {
 
 var actions = {
   die: function () {
-    trigger('die', {source: guy.name, damage: 'KO'});
+    trigger('die', {source: guy, damage: 'KO'});
   },
   walkForward: function () {
-
+    guy.position[0] += guy.position[2][0];
+    guy.position[1] += guy.position[2][1];
   }
 };
 
@@ -65,7 +68,7 @@ var actions = {
 
 var reports = {
   dmgSource: function (data) {
-    writeConsole(guy.name.toUpperCase() + ': I have taken "' + data.damage + '" damage from "' + data.source + '".');
+    writeConsole(guy.name.toUpperCase() + ': I have taken "' + data.damage + '" damage from "' + data.source.name + '".');
   },
   inventory: function () {
 
@@ -82,21 +85,27 @@ var effects = {
     guy.alive = false;
     guy.health = 0;
     endGame();
+  },
+  swimming: function () {
+    // TODO - replace this with some actual swimming action
+    trigger('die', {damage: 'KO', source: {name: 'drowning'}});
   }
 };
 
-var world = [
-  [1,1,1,1,1,1,1,1,1,1],
-  [1,1,0,0,0,0,0,0,1,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,1],
-  [1,1,0,0,0,0,0,0,1,1],
-  [1,1,1,1,1,1,1,1,1,1]
-];
+var world = {
+  babbyHills: [
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,0,0,0,0,0,0,1,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,1,0,0,0,0,0,0,1,1],
+    [1,1,1,1,1,1,1,1,1,1]
+  ]
+};
 
 $('.play').click(function (e) {
   if (guy.alive) return;
@@ -108,10 +117,12 @@ $('.play').click(function (e) {
 });
 
 var startGame = function () {
-  var mid = Math.floor(world.length/2);
+  currentWorld = world.babbyHills;
+  var mid = Math.floor(currentWorld.length/2);
 
   writeConsole('SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.');
-  guy.position = [mid, mid];
+  guy.position[0] = mid;
+  guy.position[1] = mid;
 
   gameloop = setInterval(update, 1000);
 
@@ -143,6 +154,19 @@ var endGame = function () {
 // Update loop. Actions repeated every second by default.
 var update = function () {
   if (guy.ai.always) guy.ai.always();
+
+  // check character state
+  var ground = currentWorld[guy.position[1]][guy.position[0]];
+
+  switch (ground) {
+    case 0:
+      break;
+    case 1:
+      trigger('swimming');
+      break;
+    default:
+      trigger('die', {damage: 'KO', source: {name: 'THE VOID'}});
+  }
 };
 
 var writeConsole = function (text) {
@@ -150,6 +174,7 @@ var writeConsole = function (text) {
 };
 
 var trigger = function (evt, data) {
+  if (!evt) return;
   if (effects[evt]) effects[evt](data);
   if (guy.reports[evt]) guy.reports[evt](data);
   if (guy.ai[evt]) guy.ai[evt](data);
