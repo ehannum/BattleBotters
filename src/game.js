@@ -1,9 +1,17 @@
 console.log('                           11000111 1                           \n                      111111     11111011                       \n                   1111               0000 111                  \n                 101                   0001  10                 \n               101                       100  11                \n              01        11        111111  1001 11               \n             0     111000111    101    11011101 01              \n            11    11111       101        1    11 0              \n            0              1111                0  0             \n           0011111  11111111                   10001            \n          101    11111                          0000            \n          11                            11      00000           \n           0                    100000000       100000          \n           11                  11  1000000      100000          \n            0    1111         1     1000000      0000001        \n            11  11 1000       1     1000000      00000 01       \n             001    1000      10  100000000      00000  0       \n             111    00001      0 100000000       00000   0      \n              000 1000000       000000000        0001     0     \n               01  000000       01 111          10000 10111     \n               0 00000000                       0 101 1110      \n            11111  1000                      1101  0  111       \n            10  0                           0  0  1  001        \n              0 10                         11  0  0 10          \n               11 1                        0  11 0111           \n  1011110111111 01000                     0000000  100001       \n101110110    10000000001               10000001    000000011    \n 111011 10011   00000000000011111  110000011     100000000  0   \n          11101  00000000000000 1110000000      000000000   11  \n              1101     00000000     00000    11000000001    11  \n                 11      100000  11 1000  1001 100001        0  \n                   0 100000  00  01   001 00    0000         0  \n                  11  11001 1000101    0111      001         0  \n                  0         1  0  0    0          0111111111101 \n                  0         11 01  111 01       1111         11 \n                 101        11 110   1110   11111  0         10 \n                 0  111111111111 10     011111      0         0 \n                10           00    01   11           0        0 \n                0            00     111110           10       0 \n                0            00         10            01      11\n               11            00          10            01     11\n               0             01           0             0000   0\n              10             0            11             0000  0\n              0              0             0            10000  0\n              0              0             0             0000011\n             11 10000000001  01            100000000      00010 \n              01000000000001 0              00000000001   1111  \n              1  000000000001               1  00000000011111   \n                 0000000000                    00000001  11     \n                  10000001                    0 0011   111      \n                                                1111111         \nWelcome to the dev console! Your character is globally scoped! Go nuts!');
 
 var guy = {};
+var gameloop;
+var botCount = 1;
 
 var Guy = function (name) {
-  this.name = name || 'Robot-0001';
+  if (name) {
+    this.name = name;
+  } else {
+    this.name = 'Robo-000' + botCount;
+    botCount++;
+  }
+
   this.level = 1;
   this.exp = 0;
   this.alive = true;
@@ -15,7 +23,7 @@ var Guy = function (name) {
   this.health = 20;
   this.mana = 10;
 
-  this.maxHeath = 20;
+  this.maxHealth = 20;
   this.maxMana = 10;
 
   // [x, y, direction]
@@ -42,22 +50,38 @@ var Guy = function (name) {
   };
 };
 
+// bot response to events
+
 var actions = {
   die: function () {
-    guy.alive = false;
-    if (guy.reports.die) guy.reports.die({source: 'yourself'});
+    trigger('die', {source: guy.name, damage: 'KO'});
+  },
+  walkForward: function () {
+
   }
 };
 
-var reports = {
-  dmgSource: function (source) {
+// bot reports of events
 
+var reports = {
+  dmgSource: function (data) {
+    writeConsole(guy.name.toUpperCase() + ': I have taken "' + data.damage + '" damage from "' + data.source + '".');
   },
   inventory: function () {
 
   },
   health: function () {
     writeConsole(guy.name.toUpperCase() + ': I have ' + guy.health + '/' + guy.maxHealth + ' HP.');
+  }
+};
+
+// global effects of events
+
+var effects = {
+  die: function () {
+    guy.alive = false;
+    guy.health = 0;
+    endGame();
   }
 };
 
@@ -78,6 +102,7 @@ $('.play').click(function (e) {
   if (guy.alive) return;
 
   guy = new Guy($('.bot-name').val());
+  $('.bot-name').val('');
 
   startGame();
 });
@@ -88,19 +113,44 @@ var startGame = function () {
   writeConsole('SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.');
   guy.position = [mid, mid];
 
-  setInterval(update, 1000);
+  gameloop = setInterval(update, 1000);
+
+  // read dropdowns
+  // actions:
+
+  for (var i = 1; i <= guy.level; i++) {
+    var actIf = $('.action' + i + '-if').val();
+    var actThen = $('.action' + i + '-then').val();
+
+    guy.ai[actIf] = actions[actThen];
+  }
+
+  // reports:
+
+  for (var j = 1; j <= guy.level; j++) {
+    var repIf = $('.report' + j + '-if').val();
+    var repThen = $('.report' + j + '-then').val();
+
+    guy.ai[repIf] = reports[repThen];
+  }
 };
 
 var endGame = function () {
-  writeConsole('SYSTEM: Game Over');
-  clearInterval(update);
+  writeConsole('SYSTEM: ' + guy.name + ' has died.');
+  clearInterval(gameloop);
 };
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
-  if (guy.always) guy.always();
+  if (guy.ai.always) guy.ai.always();
 };
 
 var writeConsole = function (text) {
   $('.console').append('<br /><span>' + text + '</span>');
+};
+
+var trigger = function (evt, data) {
+  if (effects[evt]) effects[evt](data);
+  if (guy.reports[evt]) guy.reports[evt](data);
+  if (guy.ai[evt]) guy.ai[evt](data);
 };
