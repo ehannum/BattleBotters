@@ -3,7 +3,6 @@ console.log('                           11000111 1                           \n 
 var guy = {};
 var gameloop;
 var botCount = 1;
-var currentWorld = [[0]];
 
 var Guy = function (name) {
   if (name) {
@@ -31,6 +30,7 @@ var Guy = function (name) {
   // direction is for movement and hit testing [-up/+down, -left/+right]
   // north = [-1. 0], south = [1, 0], west = [0, -1], east = [0, 1]
   this.position = [0, 0, [-1, 0]];
+  this.currentWorld = '';
 
   this.ai = [];
 
@@ -83,8 +83,8 @@ $('.play').click(function (e) {
 });
 
 var startGame = function () {
-  currentWorld = world.babbyHills;
-  var mid = Math.floor(currentWorld.length/2);
+  guy.currentWorld = 'babbyHills';
+  var mid = Math.floor(guy.currentWorld.length/2);
 
   writeConsole('SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.');
   guy.position[0] = mid;
@@ -110,7 +110,7 @@ var startGame = function () {
 };
 
 var endGame = function () {
-  writeConsole('SYSTEM: ' + guy.name + ' has died.');
+  writeConsole('SYSTEM: Game Over');
   clearInterval(gameloop);
 };
 
@@ -118,6 +118,10 @@ var endGame = function () {
 var update = function () {
   for (var i = 0; i < guy.ai.length; i++) {
     guy.ai[i]();
+  }
+
+  for (var effect in effects) {
+    effects[effect]();
   }
 };
 
@@ -133,6 +137,8 @@ var getTimestamp = function () {
 
 // game AI functions
 
+// tested on update loop
+
 var tests = {
   always: function () {
     return true;
@@ -145,11 +151,40 @@ var tests = {
   }
 };
 
+// bot responses to triggers
+
 var responses = {
   walkForward: function () {
-    console.log('walking forward');
+    guy.position[0] += guy.position[2][0];
+    guy.position[1] += guy.position[2][1];
   },
   die: function () {
-    
+    guy.health = 0;
+    guy.alive = false;
+    endGame();
+  }
+};
+
+// bot reports of events
+
+var reports = {
+  dmgSource: function (data) {
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Took "' + data.damage + '" damage from "' + data.source.name + '".');
+  },
+  inventory: function () {
+
+  },
+  health: function () {
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Has ' + guy.health + '/' + guy.maxHealth + ' HP.');
+  }
+};
+
+// global effects
+
+var effects = {
+  swimming: function () {
+    if (world[guy.currentWorld][guy.position[1]][guy.position[0]] === 1) {
+      responses.die();
+    }
   }
 };
