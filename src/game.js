@@ -134,12 +134,12 @@ var endGame = function () {
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
-  for (var effect in effects) {
-    effects[effect]();
-  }
-
   for (var i = 0; i < guy.ai.length; i++) {
     guy.ai[i]();
+  }
+
+  for (var effect in effects) {
+    effects[effect]();
   }
 
   for (var j = 0; j < guy.reporter.length; j++) {
@@ -216,7 +216,7 @@ var effects = {
     }
   },
   die: function () {
-    if (guy.health <= 0) {
+    if (guy.health <= 0 || guy.alive === false) {
       guy.health = 0;
       guy.alive = false;
       endGame();
