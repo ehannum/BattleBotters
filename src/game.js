@@ -64,6 +64,19 @@ var actions = {
   }
 };
 
+// tests
+
+var tests = {
+  always: function () {
+    
+  },
+  facing: function () {
+    if (1) {
+
+    }
+  }
+};
+
 // bot reports of events
 
 var reports = {
@@ -74,7 +87,7 @@ var reports = {
 
   },
   health: function () {
-    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Has ' + guy.health + '/' + guy.maxHealth + ' HP.');
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Had ' + guy.health + '/' + guy.maxHealth + ' HP.');
   }
 };
 
@@ -92,6 +105,8 @@ var effects = {
   }
 };
 
+// World Data
+
 var world = {
   babbyHills: [
     [1,1,1,1,1,1,1,1,1,1],
@@ -106,6 +121,16 @@ var world = {
     [1,1,1,1,1,1,1,1,1,1]
   ]
 };
+
+// Game Functions
+
+$('.action1-if').on('change', function () {
+  console.log('changed');
+  var dropdown = dropdowns[$('.action1-if').val()];
+  if (dropdown) {
+    $('.specific1').append(dropdown);
+  }
+});
 
 $('.play').click(function (e) {
   if (guy.alive) return;

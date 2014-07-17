@@ -6,19 +6,19 @@
     <title>Battle Botters! - The only MMO with no players! You know, other than Wildstar!</title>
   </head>
   <body>
-    
+
     <div class="col2 actions">
       Actions:
-      <form class="action1">
+      <form class="action">
         When:
-        <select class="action1-if">
+        <select class="action-if">
           <option value="always">Always</option>
           <option value="facing">Facing...</option>
           <option value="near">Near...</option>
         </select>
         <span class="specific"></span>
         Then:
-        <select class="action1-then">
+        <select class="action-then">
           <option value="walkForward">Walk Forward</option>
           <option value="die">Kill Self</option>
         </select>
@@ -30,13 +30,13 @@
 
     <div class="col2 reports">
       Reports:
-      <form class="action1">
+      <form class="report1">
         When:
-        <select class="report1-if">
+        <select class="report-if">
           <option value="die">Dead</option>
         </select>
         Report:
-        <select class="report1-then">
+        <select class="report-then">
           <option value="dmgSource">Damage Source</option>
           <option value="health">Current Health</option>
           <option value="inventory">Inventory</option>
@@ -57,5 +57,6 @@
     <p style="text-align:center;">BattleBotters (c) 2014 Eric Hannum. ehannum@gmail.com</p>
   </body>
   <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="src/dropdowns.js"></script>
   <script src="src/game.js"></script>
 </html>
