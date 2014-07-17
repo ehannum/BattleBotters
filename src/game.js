@@ -31,10 +31,12 @@ var Guy = function (name) {
   // north = [-1. 0], south = [1, 0], west = [0, -1], east = [0, 1]
   this.position = [0, 0, [-1, 0]];
   this.currentWorld = '';
+  this.lastDamageSource = '';
+  this.lastDamageAmmount = 0;
 
   this.ai = [];
 
-  this.reports = [];
+  this.reporter = [];
 
   this.inventory = {
     healthPotions: 5,
@@ -93,6 +95,7 @@ var startGame = function () {
   gameloop = setInterval(update, 1000);
 
   // read dropdowns
+  // actions
 
   var guyActions = $('.action');
 
@@ -107,23 +110,44 @@ var startGame = function () {
       }
     });
   }
+
+  //reports
+
+  var guyReports = $('.report');
+
+  for (var j = 0; j < guyReports.length; j++) {
+    var cause = $(guyReports[j]).children('.report-if').val();
+    var report = $(guyReports[j]).children('.report-then').val();
+
+    guy.reporter.push(function () {
+      if (tests[cause]()) {
+        reports[report]();
+      }
+    });
+  }
 };
 
 var endGame = function () {
-  writeConsole('SYSTEM: Game Over');
+  writeConsole('SYSTEM: ' + guy.name + ' has died. Game Over');
   clearInterval(gameloop);
 };
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
+  for (var effect in effects) {
+    effects[effect]();
+  }
+
   for (var i = 0; i < guy.ai.length; i++) {
     guy.ai[i]();
   }
 
-  for (var effect in effects) {
-    effects[effect]();
+  for (var j = 0; j < guy.reporter.length; j++) {
+    guy.reporter[j]();
   }
 };
+
+// writing to game console
 
 var writeConsole = function (text) {
   $('.console').append('<br /><span>' + text + '</span>');
@@ -148,6 +172,12 @@ var tests = {
       return true;
     }
     return false;
+  },
+  dead: function () {
+    if (!guy.alive) {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -159,9 +189,7 @@ var responses = {
     guy.position[1] += guy.position[2][1];
   },
   die: function () {
-    guy.health = 0;
-    guy.alive = false;
-    endGame();
+    takeDamage(guy.maxHealth, guy.name);
   }
 };
 
@@ -169,10 +197,10 @@ var responses = {
 
 var reports = {
   dmgSource: function (data) {
-    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Took "' + data.damage + '" damage from "' + data.source.name + '".');
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Took ' + guy.lastDamageAmmount + ' damage from "' + guy.lastDamageSource + '".');
   },
   inventory: function () {
-
+    // todo: this very time-consuming task
   },
   health: function () {
     writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Has ' + guy.health + '/' + guy.maxHealth + ' HP.');
@@ -184,7 +212,20 @@ var reports = {
 var effects = {
   swimming: function () {
     if (world[guy.currentWorld][guy.position[1]][guy.position[0]] === 1) {
-      responses.die();
+      takeDamage(guy.maxHealth, 'drowning');
+    }
+  },
+  die: function () {
+    if (guy.health <= 0) {
+      guy.health = 0;
+      guy.alive = false;
+      endGame();
     }
   }
+};
+
+var takeDamage = function (damage, source) {
+  guy.health -= damage;
+  guy.lastDamageAmmount = damage;
+  guy.lastDamageSource = source;
 };
