@@ -32,15 +32,9 @@ var Guy = function (name) {
   // north = [-1. 0], south = [1, 0], west = [0, -1], east = [0, 1]
   this.position = [0, 0, [-1, 0]];
 
-  this.ai = {
-    always: null,
-    near: null,
-    facing: null
-  };
+  this.ai = [];
 
-  this.reports = {
-    die: null
-  };
+  this.reports = [];
 
   this.inventory = {
     healthPotions: 5,
@@ -50,59 +44,6 @@ var Guy = function (name) {
   this.spellbook = {
     fireball: {name: 'Fireball', dmg: 2, cost: 2}
   };
-};
-
-// bot response to events
-
-var actions = {
-  die: function () {
-    trigger('die', {source: guy, damage: 'Instant Kill'});
-  },
-  walkForward: function () {
-    guy.position[0] += guy.position[2][0];
-    guy.position[1] += guy.position[2][1];
-  }
-};
-
-// tests
-
-var tests = {
-  always: function () {
-    
-  },
-  facing: function () {
-    if (1) {
-
-    }
-  }
-};
-
-// bot reports of events
-
-var reports = {
-  dmgSource: function (data) {
-    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Took "' + data.damage + '" damage from "' + data.source.name + '".');
-  },
-  inventory: function () {
-
-  },
-  health: function () {
-    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Had ' + guy.health + '/' + guy.maxHealth + ' HP.');
-  }
-};
-
-// global effects of events
-
-var effects = {
-  die: function () {
-    guy.alive = false;
-    guy.health = 0;
-    endGame();
-  },
-  swimming: function () {
-    // TODO - replace this with some actual swimming action
-    trigger('die', {damage: 'Instant Kill', source: {name: 'drowning'}});
-  }
 };
 
 // World Data
@@ -152,22 +93,19 @@ var startGame = function () {
   gameloop = setInterval(update, 1000);
 
   // read dropdowns
-  // actions:
 
-  for (var i = 1; i <= guy.level; i++) {
-    var actIf = $('.action' + i + '-if').val();
-    var actThen = $('.action' + i + '-then').val();
+  var guyActions = $('.action');
 
-    guy.ai[actIf] = actions[actThen];
-  }
+  for (var i = 0; i < guyActions.length; i++) {
+    var trigger = $(guyActions[i]).children('.action-if').val();
+    var arg = $(guyActions[i]).children('.action-arg').val();
+    var response = $(guyActions[i]).children('.action-then').val();
 
-  // reports:
-
-  for (var j = 1; j <= guy.level; j++) {
-    var repIf = $('.report' + j + '-if').val();
-    var repThen = $('.report' + j + '-then').val();
-
-    guy.ai[repIf] = reports[repThen];
+    guy.ai.push(function () {
+      if (tests[trigger](arg)) {
+        responses[response]();
+      }
+    });
   }
 };
 
@@ -178,22 +116,8 @@ var endGame = function () {
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
-  if (guy.ai.always) guy.ai.always();
-
-  // check character state
-  var ground = currentWorld[guy.position[1]][guy.position[0]];
-
-  switch (ground) {
-    case 0:
-      // normal ground
-      break;
-    case 1:
-      // water
-      trigger('swimming');
-      break;
-    default:
-      // I don't know where you are
-      trigger('die', {damage: 'Instant Kill', source: {name: 'THE VOID'}});
+  for (var i = 0; i < guy.ai.length; i++) {
+    guy.ai[i]();
   }
 };
 
@@ -202,14 +126,30 @@ var writeConsole = function (text) {
   $('.console').scrollTop($('.console')[0].scrollHeight);
 };
 
-var trigger = function (evt, data) {
-  if (!evt) return;
-  if (effects[evt]) effects[evt](data);
-  if (guy.reports[evt]) guy.reports[evt](data);
-  if (guy.ai[evt]) guy.ai[evt](data);
-};
-
 var getTimestamp = function () {
   var date = new Date();
   return '[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']';
+};
+
+// game AI functions
+
+var tests = {
+  always: function () {
+    return true;
+  },
+  facing: function (tile) {
+    if (/*tile ahead of guy === tile*/1) {
+      return true;
+    }
+    return false;
+  }
+};
+
+var responses = {
+  walkForward: function () {
+    console.log('walking forward');
+  },
+  die: function () {
+    
+  }
 };

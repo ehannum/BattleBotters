@@ -10,7 +10,7 @@ var startGame = function () {
 
     ai.push(function () {
       if (tests[trigger](arg)) {
-        response();
+        actions[response]();
       }
     });
   }
