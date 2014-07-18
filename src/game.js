@@ -182,7 +182,7 @@ var tests = {
   },
   facing: function (tile) {
     var testWorld = world[guy.currentWorld];
-    if (guy.position[0]+guy.position[2][0] === undefined) return true;
+    if (testWorld[guy.position[0]+guy.position[2][0]] === undefined) return true;
     if (testWorld[guy.position[0]+guy.position[2][0]][guy.position[1]+guy.position[2][1]] === tile) {
       return true;
     }
