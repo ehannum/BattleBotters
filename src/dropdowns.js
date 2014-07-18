@@ -11,6 +11,9 @@ var dropdowns = {
             '<select class="action-then">' +
               '<option value="walkForward">Walk Forward</option>' +
               '<option value="die">Kill Self</option>' +
+              '<option value="turnLeft">Turn Left</option>' +
+              '<option value="turnRight">Turn Right</option>' +
+              '<option value="turnAround">Turn Around</option>' +
             '</select>' +
             '<input class="and" type="button" value="And...">' +
             '<input class="moveup" type="button" value="^">' +

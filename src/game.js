@@ -32,7 +32,7 @@ var Guy = function (name) {
 
   // [x, y, direction]
   // direction is for movement and hit testing [-up/+down, -left/+right]
-  // north = [-1. 0], south = [1, 0], west = [0, -1], east = [0, 1]
+  // north = [-1, 0], south = [1, 0], west = [0, -1], east = [0, 1]
   this.position = [0, 0, [-1, 0]];
   this.currentWorld = '';
   this.lastDamageSource = '';
@@ -182,8 +182,8 @@ var tests = {
   },
   facing: function (tile) {
     var testWorld = world[guy.currentWorld];
-    if (testWorld[guy.position[0]+guy.position[2][0]] === undefined) return true;
-    if (testWorld[guy.position[0]+guy.position[2][0]][guy.position[1]+guy.position[2][1]] === tile) {
+    if (testWorld[guy.position[0]+guy.position[2][0]] === undefined) return false;
+    if (testWorld[guy.position[0]+guy.position[2][0]][guy.position[1]+guy.position[2][1]] == tile) {
       return true;
     }
     return false;
@@ -205,6 +205,40 @@ var responses = {
   },
   die: function () {
     takeDamage(guy.maxHealth, guy.name);
+  },
+  turnLeft: function () {
+    var directions = [[0, -1], [-1, 0], [0, 1], [1, 0]];
+    for (var i = 0; i < directions.length; i++) {
+      if (guy.position[2][0] === directions[i][0] && guy.position[2][1] === directions[i][1]) {
+        if (i === 3) {
+          guy.position[2][0] = directions[0][0];
+          guy.position[2][1] = directions[0][1];
+        } else {
+          guy.position[2][0] = directions[i+1][0];
+          guy.position[2][1] = directions[i+1][1];
+        }
+        break;
+      }
+    }
+  },
+  turnRight: function () {
+    var directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    for (var i = 0; i < directions.length; i++) {
+      if (guy.position[2][0] === directions[i][0] && guy.position[2][1] === directions[i][1]) {
+        if (i === 3) {
+          guy.position[2][0] = directions[0][0];
+          guy.position[2][1] = directions[0][1];
+        } else {
+          guy.position[2][0] = directions[i+1][0];
+          guy.position[2][1] = directions[i+1][1];
+        }
+        break;
+      }
+    }
+  },
+  turnAround: function () {
+    guy.position[2][0] *= -1;
+    guy.position[2][1] *= -1;
   }
 };
 
