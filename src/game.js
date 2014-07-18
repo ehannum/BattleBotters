@@ -4,6 +4,10 @@ var guy = {};
 var gameloop;
 var botCount = 1;
 
+for (var i = 0; i < 2; i++) {
+  $('.actions').append(dropdowns.action);
+}
+
 var Guy = function (name) {
   if (name) {
     this.name = name;
@@ -67,11 +71,12 @@ var world = {
 
 // Game Functions
 
-$('.action1-if').on('change', function () {
-  console.log('changed');
-  var dropdown = dropdowns[$('.action1-if').val()];
+$('.action-if').on('change', function () {
+  var dropdown = dropdowns[$(this).val()];
   if (dropdown) {
-    $('.specific1').append(dropdown);
+    $(this).siblings('.specific').append(dropdown);
+  } else {
+    $(this).siblings('.specific').html('');
   }
 });
 
@@ -101,14 +106,10 @@ var startGame = function () {
 
   for (var i = 0; i < guyActions.length; i++) {
     var trigger = $(guyActions[i]).children('.action-if').val();
-    var arg = $(guyActions[i]).children('.action-arg').val();
+    var arg = $(guyActions[i]).children('.specific').children('.action-arg').val();
     var response = $(guyActions[i]).children('.action-then').val();
 
-    guy.ai.push(function () {
-      if (tests[trigger](arg)) {
-        responses[response]();
-      }
-    });
+    guy.ai.push(makeAction(trigger, arg, response));
   }
 
   //reports
@@ -119,12 +120,24 @@ var startGame = function () {
     var cause = $(guyReports[j]).children('.report-if').val();
     var report = $(guyReports[j]).children('.report-then').val();
 
-    guy.reporter.push(function () {
-      if (tests[cause]()) {
-        reports[report]();
-      }
-    });
+    guy.reporter.push(makeReport(cause, report));
   }
+};
+
+var makeAction = function (trigger, arg, response) {
+  return function () {
+    if (tests[trigger](arg)) {
+      responses[response]();
+    }
+  };
+};
+
+var makeReport = function (cause, report) {
+  return function () {
+    if (tests[cause]()) {
+      reports[report]();
+    }
+  };
 };
 
 var endGame = function () {
@@ -168,7 +181,9 @@ var tests = {
     return true;
   },
   facing: function (tile) {
-    if (/*tile ahead of guy === tile*/1) {
+    var testWorld = world[guy.currentWorld];
+    if (guy.position[0]+guy.position[2][0] === undefined) return true;
+    if (testWorld[guy.position[0]+guy.position[2][0]][guy.position[1]+guy.position[2][1]] === tile) {
       return true;
     }
     return false;
@@ -181,7 +196,7 @@ var tests = {
   }
 };
 
-// bot responses to triggers
+// bot responses when tests are true
 
 var responses = {
   walkForward: function () {
@@ -225,7 +240,9 @@ var effects = {
 };
 
 var takeDamage = function (damage, source) {
-  guy.health -= damage;
-  guy.lastDamageAmmount = damage;
-  guy.lastDamageSource = source;
+  if (guy.health > 0) {
+    guy.health -= damage;
+    guy.lastDamageAmmount = damage;
+    guy.lastDamageSource = source;
+  }
 };
