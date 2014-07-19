@@ -97,8 +97,6 @@ var startGame = function () {
   guy.position[0] = mid;
   guy.position[1] = mid;
 
-  gameloop = setInterval(update, 1000);
-
   // read dropdowns
   // actions
 
@@ -122,6 +120,10 @@ var startGame = function () {
 
     guy.reporter.push(makeReport(cause, report));
   }
+
+  removeDuplicateActions();
+
+  gameloop = setInterval(update, 1000);
 };
 
 var makeAction = function (trigger, arg, response) {
@@ -279,4 +281,22 @@ var takeDamage = function (damage, source) {
     guy.lastDamageAmmount = damage;
     guy.lastDamageSource = source;
   }
+};
+
+var removeDuplicateActions = function () {
+  // todo: find out a way to do this...
+  // oh shit wait no i thought of one
+  // use the closure of the constructor loop
+  // make an array of arrays of actions and shit
+  // deep equals check each one
+  // boom, ship it. I'm busy now though.
+};
+
+var deepEquals = function (arr1, arr2) {
+  for (var i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 };
