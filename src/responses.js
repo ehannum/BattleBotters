@@ -41,5 +41,8 @@ var responses = {
   turnAround: function () {
     guy.position[2][0] *= -1;
     guy.position[2][1] *= -1;
+  },
+  attack: function () {
+    enemy.health -= guy.inventory.weapon.dmg;
   }
 };
