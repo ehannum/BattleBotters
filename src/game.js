@@ -1,4 +1,4 @@
-console.log('                           11000111 1                           \n                      111111     11111011                       \n                   1111               0000 111                  \n                 101                   0001  10                 \n               101                       100  11                \n              01        11        111111  1001 11               \n             0     111000111    101    11011101 01              \n            11    11111       101        1    11 0              \n            0              1111                0  0             \n           0011111  11111111                   10001            \n          101    11111                          0000            \n          11                            11      00000           \n           0                    100000000       100000          \n           11                  11  1000000      100000          \n            0    1111         1     1000000      0000001        \n            11  11 1000       1     1000000      00000 01       \n             001    1000      10  100000000      00000  0       \n             111    00001      0 100000000       00000   0      \n              000 1000000       000000000        0001     0     \n               01  000000       01 111          10000 10111     \n               0 00000000                       0 101 1110      \n            11111  1000                      1101  0  111       \n            10  0                           0  0  1  001        \n              0 10                         11  0  0 10          \n               11 1                        0  11 0111           \n  1011110111111 01000                     0000000  100001       \n101110110    10000000001               10000001    000000011    \n 111011 10011   00000000000011111  110000011     100000000  0   \n          11101  00000000000000 1110000000      000000000   11  \n              1101     00000000     00000    11000000001    11  \n                 11      100000  11 1000  1001 100001        0  \n                   0 100000  00  01   001 00    0000         0  \n                  11  11001 1000101    0111      001         0  \n                  0         1  0  0    0          0111111111101 \n                  0         11 01  111 01       1111         11 \n                 101        11 110   1110   11111  0         10 \n                 0  111111111111 10     011111      0         0 \n                10           00    01   11           0        0 \n                0            00     111110           10       0 \n                0            00         10            01      11\n               11            00          10            01     11\n               0             01           0             0000   0\n              10             0            11             0000  0\n              0              0             0            10000  0\n              0              0             0             0000011\n             11 10000000001  01            100000000      00010 \n              01000000000001 0              00000000001   1111  \n              1  000000000001               1  00000000011111   \n                 0000000000                    00000001  11     \n                  10000001                    0 0011   111      \n                                                1111111         \nWelcome to the dev console! Your character is globally scoped! Go nuts!');
+console.log('                           11000111 1                           \n                      111111     11111011                       \n                   1111               0000 111                  \n                 101                   0001  10                 \n               101                       100  11                \n              01        11        111111  1001 11               \n             0     111000111    101    11011101 01              \n            11    11111       101        1    11 0              \n            0              1111                0  0             \n           0011111  11111111                   10001            \n          101    11111                          0000            \n          11                            11      00000           \n           0                    100000000       100000          \n           11                  11  1000000      100000          \n            0    1111         1     1000000      0000001        \n            11  11 1000       1     1000000      00000 01       \n             001    1000      10  100000000      00000  0       \n             111    00001      0 100000000       00000   0      \n              000 1000000       000000000        0001     0     \n               01  000000       01 111          10000 10111     \n               0 00000000                       0 101 1110      \n            11111  1000                      1101  0  111       \n            10  0                           0  0  1  001        \n              0 10                         11  0  0 10          \n               11 1                        0  11 0111           \n  1011110111111 01000                     0000000  100001       \n101110110    10000000001               10000001    000000011    \n 111011 10011   00000000000011111  110000011     100000000  0   \n          11101  00000000000000 1110000000      000000000   11  \n              1101     00000000     00000    11000000001    11  \n                 11      100000  11 1000  1001 100001        0  \n                   0 100000  00  01   001 00    0000         0  \n                  11  11001 1000101    0111      001         0  \n                  0         1  0  0    0          0111111111101 \n                  0         11 01  111 01       1111         11 \n                 101        11 110   1110   11111  0         10 \n                 0  111111111111 10     011111      0         0 \n                10           00    01   11           0        0 \n                0            00     111110           10       0 \n                0            00         10            01      11\n               11            00          10            01     11\n               0             01           0             0000   0\n              10             0            11             0000  0\n              0              0             0            10000  0\n              0              0             0             0000011\n             11 10000000001  01            100000000      00010 \n              01000000000001 0              00000000001   1111  \n              1  000000000001               1  00000000011111   \n                 0000000000                    00000001  11     \n                  10000001                    0 0011   111      \n                                                1111111         \nWelcome to the dev console! Your character is globally scoped, go nuts!');
 
 var guy = {};
 var gameloop;
@@ -102,10 +102,16 @@ var startGame = function () {
 
   var guyActions = $('.action');
 
+  var actionsSoFar = [];
+
   for (var i = 0; i < guyActions.length; i++) {
     var trigger = $(guyActions[i]).children('.action-if').val();
     var arg = $(guyActions[i]).children('.specific').children('.action-arg').val();
     var response = $(guyActions[i]).children('.action-then').val();
+
+    var actionHash = '' + trigger + arg + response;
+    if (actionsSoFar.indexOf(actionHash) !== -1) break;
+    actionsSoFar.push(actionHash);
 
     guy.ai.push(makeAction(trigger, arg, response));
   }
@@ -120,8 +126,6 @@ var startGame = function () {
 
     guy.reporter.push(makeReport(cause, report));
   }
-
-  removeDuplicateActions();
 
   gameloop = setInterval(update, 1000);
 };
@@ -281,22 +285,4 @@ var takeDamage = function (damage, source) {
     guy.lastDamageAmmount = damage;
     guy.lastDamageSource = source;
   }
-};
-
-var removeDuplicateActions = function () {
-  // todo: find out a way to do this...
-  // oh shit wait no i thought of one
-  // use the closure of the constructor loop
-  // make an array of arrays of actions and shit
-  // deep equals check each one
-  // boom, ship it. I'm busy now though.
-};
-
-var deepEquals = function (arr1, arr2) {
-  for (var i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
 };
