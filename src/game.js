@@ -128,7 +128,7 @@ var startGame = function () {
     if (actionsSoFar.indexOf(reportHash) !== -1) break;
     actionsSoFar.push(reportHash);
 
-    guy.reporter.push(makeReport(cause, report));g
+    guy.reporter.push(makeReport(cause, report));
   }
 
   gameloop = setInterval(update, 1000);
