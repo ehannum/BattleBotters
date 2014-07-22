@@ -1,6 +1,6 @@
 {
   "name": "BattleBotters",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Bots! Battling!",
   "main": "server.js",
   "scripts": {

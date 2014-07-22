@@ -4,6 +4,8 @@ var responses = {
   walkForward: function () {
     guy.position[0] += guy.position[2][0];
     guy.position[1] += guy.position[2][1];
+    // running from enemies
+    combatCounter--;
   },
   die: function () {
     takeDamage(guy.maxHealth, guy.name);
@@ -44,5 +46,6 @@ var responses = {
   },
   attack: function () {
     enemy.health -= guy.inventory.weapon.dmg;
+    combatCounter++;
   }
 };

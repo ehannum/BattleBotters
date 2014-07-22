@@ -1,16 +1,16 @@
 // tests for AI on game update loop
 
 var tests = {
+  // todo: replace always with "otherwise"
   always: function () {
     return true;
   },
   facing: function (tile) {
-    var testWorld = world[guy.currentWorld];
-    if (testWorld[guy.position[0]+guy.position[2][0]] === undefined) return false;
-    if (testWorld[guy.position[0]+guy.position[2][0]][guy.position[1]+guy.position[2][1]] == tile) {
-      return true;
-    }
-    return false;
+    var facingPosition = getFacingPosition();
+    if (facingPosition === null) return false;
+    var facingTile = world[guy.currentWorld].map[facingPosition[0]][facingPosition[1]];
+
+    return tile == facingTile;
   },
   dead: function () {
     if (!guy.alive) {
