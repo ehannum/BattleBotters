@@ -192,7 +192,7 @@ var writeConsole = function (text) {
 
 var getTimestamp = function () {
   var date = new Date();
-  return '[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']';
+  return '[' + date.getHours() + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2) + ']';
 };
 
 var takeDamage = function (damage, source) {
