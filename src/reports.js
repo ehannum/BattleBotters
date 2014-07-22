@@ -9,5 +9,12 @@ var reports = {
   },
   health: function () {
     writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' Has ' + guy.health + '/' + guy.maxHealth + ' HP.');
+  },
+  drawMap: function () {
+    var map = world[guy.currentWorld].map;
+
+    for (var i = 0; i < map.length; i++) {
+      writeConsole(map[i].join(' '));
+    }
   }
 };

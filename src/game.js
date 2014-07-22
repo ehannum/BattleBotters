@@ -220,7 +220,7 @@ var randomEncounter = function () {
     var randomEnemy = randomEnemies[Math.floor(Math.random(randomEnemies.length))];
     startEncounter(randomEnemy);
 
-    // actually create the enemy in front of the player
+    // todo: actually create the enemy in front of the player
 
   }
 };
