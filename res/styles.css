@@ -26,10 +26,22 @@ form {
   overflow-y: auto;
   background-color: black;
   color: #0F0;
-  font-family: courier, serif;
-  font-size: 1.1rem;
+  font-family: monospace;
+  font-size: 1.3rem;
 }
 
 .play {
   line-height: 0;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.black {
+  color: black;
 }
