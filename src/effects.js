@@ -19,6 +19,13 @@ var effects = {
       setFacingTile(0);
       console.log('killed ' + enemy.name);
       enemy = null;
+      guy.exp += enemy.level;
+    }
+  },
+  levelUp: function () {
+    if (guy.exp > guy.level*11 && guy.level < 50) {
+      guy.level++;
+      guy.exp = 0;
     }
   }
 };

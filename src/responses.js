@@ -49,8 +49,18 @@ var responses = {
   attack: function () {
     var enemy = getFacingTile();
     if (!attacked && typeof enemy === 'object') {
-      enemy.health -= guy.inventory.weapon.dmg;
+      enemy.health -= guy.inventory.weapon.dmg + Math.floor(guy.brawn);
       attacked = true;
+      guy.brawn += 0.05;
+    }
+  },
+  cast: function (spell) {
+    if (!attacked && typeof enemy === 'object' && guy.inventory.spellbook[spell].dmg) {
+      enemy.health -= guy.inventory.spellbook[spell].dmg + Math.floor(guy.brains);
+      attacked = true;
+      guy.brawn += 0.05;
+    } else if (!attackedguy.inventory.spellbook[spell].heal) {
+      guy.health += guy.inventory.spellbook[spell].heal;
     }
   },
   nothing: function () {
