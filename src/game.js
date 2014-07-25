@@ -4,8 +4,11 @@ var guy = {alive: false};
 var enemy = null;
 var gameloop;
 var botCount = 1;
-var combatCounter = 0;
+
+// can only move and attack once per turn
 var tookAction = false;
+var moved = false;
+var attacked = false;
 
 var otherwise = function(){};
 
@@ -172,6 +175,8 @@ var endGame = function () {
 // Update loop. Actions repeated every second by default.
 var update = function () {
   tookAction = false;
+  attacked = false;
+  moved = false;
 
   for (var i = 0; i < guy.ai.length; i++) {
     guy.ai[i]();
@@ -221,26 +226,35 @@ var getFacingPosition = function () {
   return [guy.position[0]+guy.position[2][0], guy.position[1]+guy.position[2][1]];
 };
 
+var getFacingTile = function () {
+  var position = getFacingPosition();
+  return world[guy.currentWorld].map[position[0]][position[1]];
+};
+
+var setFacingTile = function (num) {
+  var facingPosition = getFacingPosition();
+  world[guy.currentWorld].map[facingPosition[0]][facingPosition[1]] = num;
+};
+
 // combat
 
 var randomEncounter = function () {
   // Yes, this game uses random encounters
   // but how is the player going to tell the difference?
 
-  if (Math.ceil(Math.random()*20) === 1) {
+  if (Math.ceil(Math.random()*20) === 1 && tests.facing(0)) {
     var randomEnemies = getEnemies('level', world[guy.currentWorld].level);
     var randomEnemy = randomEnemies[Math.floor(Math.random(randomEnemies.length))];
     startEncounter(randomEnemy);
 
-    // todo: actually create the enemy in front of the player
-
+    // actually create the enemy in front of the player
+    setFacingTile(3);
   }
 };
 
 var startEncounter = function (encounter) {
-  enemy = encounter;
+  enemy = Object.create(encounter);
   console.log('in combat with ' + enemy.name);
-  combatCounter = 3;
 };
 
 var getEnemies = function (key, value) {

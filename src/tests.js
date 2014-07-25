@@ -1,9 +1,8 @@
 // tests for AI on game update loop
 
 var tests = {
-  // todo: replace always with "otherwise"
-  always: function () {
-    return true;
+  never: function () {
+    return false;
   },
   facing: function (tile) {
     var facingPosition = getFacingPosition();
