@@ -15,7 +15,7 @@ var effects = {
   },
   kill: function () {
     var enemy = getFacingTile();
-    if (typeof enemy === 'object' && enemy.health <= 0) {
+    if (enemy && typeof enemy === 'object' && enemy.health <= 0) {
       setFacingTile(0);
       console.log('killed ' + enemy.name);
       enemy = null;

@@ -204,7 +204,7 @@ var update = function () {
   }
 
   randomEncounter();
-  if (typeof getFacingTile() === 'object') {
+  if (typeof getFacingTile() === 'object' && getFacingTile()) {
     fight();
   }
 };
