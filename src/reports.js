@@ -27,7 +27,7 @@ var reports = {
       map = map.replace(/0/g, '<span class="black">.</span>');
       map = map.replace(/1/g, '<span class="blue">~</span>');
       map = map.replace(/2/g, '<span class="white">=</span>');
-      map = map.replace(/3/g, '<span class="red">M</span>');
+      map = map.replace(/\[object Object\]/g, '<span class="red">M</span>');
 
       writeConsole('| ' + map + ' |');
     }

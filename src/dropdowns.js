@@ -15,6 +15,7 @@ var dropdowns = {
               '<option value="turnRight">Turn Right</option>' +
               '<option value="turnAround">Turn Around</option>' +
               '<option value="attack">Attack</option>' +
+              '<option value="nothing">Do Nothing</option>' +
             '</select>' +
             '<input class="and" type="button" value="And...">' +
             '<input class="moveup" type="button" value="^">' +

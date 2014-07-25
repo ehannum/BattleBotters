@@ -47,7 +47,8 @@ var responses = {
     guy.position[2][1] *= -1;
   },
   attack: function () {
-    if (!attacked && getFacingTile() === 3) {
+    var enemy = getFacingTile();
+    if (!attacked && typeof enemy === 'object') {
       enemy.health -= guy.inventory.weapon.dmg;
       attacked = true;
     }
