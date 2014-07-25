@@ -47,5 +47,8 @@ var responses = {
   attack: function () {
     enemy.health -= guy.inventory.weapon.dmg;
     combatCounter++;
+  },
+  nothing: function () {
+    // lol no
   }
 };

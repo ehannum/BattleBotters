@@ -5,9 +5,12 @@ var enemy = null;
 var gameloop;
 var botCount = 1;
 var combatCounter = 0;
+var tookAction = false;
+
+var otherwise = function(){};
 
 for (var i = 0; i < 2; i++) {
-  $('.actions').append(dropdowns.action);
+  $('.actions').prepend(dropdowns.action);
 }
 
 var Guy = function (name) {
@@ -124,6 +127,8 @@ var startGame = function () {
     guy.ai.push(makeAction(trigger, arg, response));
   }
 
+  otherwise = responses[$('.otherwise').val()];
+
   //reports
 
   var guyReports = $('.report');
@@ -146,6 +151,7 @@ var makeAction = function (trigger, arg, response) {
   return function () {
     if (tests[trigger](arg)) {
       responses[response]();
+      tookAction = true;
     }
   };
 };
@@ -165,8 +171,14 @@ var endGame = function () {
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
+  tookAction = false;
+
   for (var i = 0; i < guy.ai.length; i++) {
     guy.ai[i]();
+  }
+
+  if (!tookAction) {
+    otherwise();
   }
 
   for (var effect in effects) {

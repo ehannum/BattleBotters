@@ -12,15 +12,25 @@ var reports = {
   },
   drawMap: function () {
     var mapData = world[guy.currentWorld].map;
+    mapData[guy.position[0]][guy.position[1]] = '#';
 
     var borderLength = new Array(mapData[0].length+1);
     border = '@' + borderLength.join('--') + '-@';
 
+    writeConsole();
     writeConsole(border);
     for (var i = 0; i < mapData.length; i++) {
-      var map = mapData[i].join(' ').replace(/1/g, '<span class="blue">~</span>').replace(/0/g, '<span class="black">.</span>');
+      var map = mapData[i].join(' ');
+      
+      // map formatting
+      map.replace(/0/g, '<span class="black">.</span>');
+      map.replace(/1/g, '<span class="blue">~</span>');
+      map.replace(/2/g, '<span class="white">=</span>');
+      map.replace(/3/g, '<span class="red">M</span>');
+
       writeConsole('| ' + map + ' |');
     }
     writeConsole(border);
+    mapData[guy.position[0]][guy.position[1]] = 0;
   }
 };

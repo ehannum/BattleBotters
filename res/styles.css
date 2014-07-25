@@ -8,12 +8,11 @@ html, body {
 form {
   border: 1px solid black;
   padding: 1%;
+  margin: 1px;
 }
 
-
-
 .col2 {
-  min-height: 40%;
+  min-height: 35%;
   display: inline-block;
   width: 47%;
   margin: 1%;
@@ -26,8 +25,8 @@ form {
   overflow-y: auto;
   background-color: black;
   color: #0F0;
-  font-family: monospace;
-  font-size: 1.3rem;
+  font-family: courier, monospace;
+  font-size: 1.1rem;
 }
 
 .play {
@@ -44,4 +43,8 @@ form {
 
 .black {
   color: black;
+}
+
+.white {
+  color: white;
 }

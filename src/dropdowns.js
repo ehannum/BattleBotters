@@ -2,7 +2,6 @@ var dropdowns = {
   action: '<form class="action">' +
             'When:' +
             '<select class="action-if">' +
-              '<option value="always">Always</option>' +
               '<option value="facing">Facing...</option>' +
               '<option value="near">Near...</option>' +
             '</select>' +
