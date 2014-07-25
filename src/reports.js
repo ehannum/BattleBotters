@@ -12,6 +12,7 @@ var reports = {
   },
   drawMap: function () {
     var mapData = world[guy.currentWorld].map;
+    var oldTile = mapData[guy.position[0]][guy.position[1]];
     mapData[guy.position[0]][guy.position[1]] = '#';
 
     var borderLength = new Array(mapData[0].length+1);
@@ -31,6 +32,6 @@ var reports = {
       writeConsole('| ' + map + ' |');
     }
     writeConsole(border);
-    mapData[guy.position[0]][guy.position[1]] = 0;
+    mapData[guy.position[0]][guy.position[1]] = oldTile;
   }
 };

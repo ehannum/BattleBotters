@@ -169,6 +169,18 @@ var makeReport = function (cause, report) {
 
 var endGame = function () {
   writeConsole('SYSTEM: ' + guy.name + ' has died. Game Over');
+
+  // clear enemies from the map
+  var dirtyWorld = world[guy.currentWorld].map;
+
+  for (var i = 0; i < dirtyWorld.length; i++) {
+    for (var j = 0; j < dirtyWorld[i].length; j++) {
+      if (dirtyWorld[i][j] === 3) {
+        dirtyWorld[i][j] = 0;
+      }
+    }
+  }
+
   clearInterval(gameloop);
 };
 
