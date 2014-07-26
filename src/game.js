@@ -253,7 +253,7 @@ var randomEncounter = function () {
 
   if (Math.ceil(Math.random()*20) === 1 && tests.facing(0)) {
     var randomEnemies = getEnemies('level', world[guy.currentWorld].level);
-    var randomEnemy = randomEnemies[Math.floor(Math.random(randomEnemies.length))];
+    var randomEnemy = randomEnemies[Math.floor(Math.random()*randomEnemies.length)];
     startEncounter(randomEnemy);
   }
 };
