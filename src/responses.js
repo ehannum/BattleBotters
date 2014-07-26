@@ -54,7 +54,9 @@ var responses = {
       guy.brawn += 0.05;
     }
   },
+  // todo: make this work somehow
   cast: function (spell) {
+    if (guy.inventory.spellbook[spell].cost > guy.mana) return;
     if (!attacked && typeof enemy === 'object' && guy.inventory.spellbook[spell].dmg) {
       enemy.health -= guy.inventory.spellbook[spell].dmg + Math.floor(guy.brains);
       attacked = true;
@@ -62,6 +64,7 @@ var responses = {
     } else if (!attackedguy.inventory.spellbook[spell].heal) {
       guy.health += guy.inventory.spellbook[spell].heal;
     }
+    guy.mana -= guy.inventory.spellbook[spell].cost;
   },
   nothing: function () {
     // lol no

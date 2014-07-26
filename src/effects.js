@@ -18,7 +18,6 @@ var effects = {
     if (enemy && typeof enemy === 'object' && enemy.health <= 0) {
       setFacingTile(0);
       console.log('killed ' + enemy.name);
-      enemy = null;
       guy.exp += enemy.level;
     }
   },
@@ -26,6 +25,10 @@ var effects = {
     if (guy.exp > guy.level*11 && guy.level < 50) {
       guy.level++;
       guy.exp = 0;
+      guy.maxHealth += Math.floor(guy.grit);
+      guy.maxMana += Math.floor(guy.brains);
+      guy.health = guy.maxHealth;
+      guy.mana = guy.maxMana;
     }
   }
 };

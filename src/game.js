@@ -27,8 +27,11 @@ var Guy = function (name) {
   this.exp = 0;
   this.alive = true;
 
+  // brawn is added to attack damage
   this.brawn = 1;
+  // brains is added to spell damage and mana gain when leveling
   this.brains = 1;
+  // grit is added to health gain when leveling
   this.grit = 1;
 
   this.health = 20;
@@ -59,27 +62,6 @@ var Guy = function (name) {
   };
 };
 
-// World Data
-
-var world = {
-  babbyHills: {
-    name: 'The Babby Hills',
-    level: 1,
-    map:[
-      [1,1,1,1,1,1,1,1,1,1],
-      [1,1,0,0,0,0,0,0,1,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,1,0,0,0,0,0,0,1,1],
-      [1,1,1,1,1,1,1,1,1,1]
-    ]
-  }
-};
-
 // Game Functions
 
 $('.action-if').on('change', function () {
@@ -107,6 +89,9 @@ var startGame = function () {
   writeConsole('SYSTEM: ' + guy.name + ' enterned the world of Xanthor in The Babby Hills facing North.');
   guy.position[0] = mid;
   guy.position[1] = mid;
+
+  comparison.health = guy.health;
+  comparison.level = guy.level;
 
   // read dropdowns
   // actions
@@ -183,6 +168,11 @@ var endGame = function () {
 
 // Update loop. Actions repeated every second by default.
 var update = function () {
+
+  // update image of guy for comparison
+  comparison.health = guy.health;
+  comparison.level = guy.level;
+
   tookAction = false;
   attacked = false;
   moved = false;
@@ -199,13 +189,29 @@ var update = function () {
     effects[effect]();
   }
 
-  for (var j = 0; j < guy.reporter.length; j++) {
-    guy.reporter[j]();
-  }
-
   randomEncounter();
   if (typeof getFacingTile() === 'object' && getFacingTile()) {
     fight();
+  }
+
+  // auto recouperation out of combat
+  if (!attacked && guy.alive) {
+    if (guy.health < guy.maxHealth) {
+      guy.health += guy.grit/10;
+    }
+    if (guy.mana < guy.maxMana) {
+      guy.mana += guy.brains/10;
+    }
+    if (guy.health > guy.maxHealth) {
+      guy.health = guy.maxHealth;
+    }
+    if (guy.mana > guy.maxMana) {
+      guy.mana = guy.maxMana;
+    }
+  }
+
+  for (var j = 0; j < guy.reporter.length; j++) {
+    guy.reporter[j]();
   }
 };
 
@@ -279,5 +285,6 @@ var takeDamage = function (damage, source) {
     guy.health -= damage;
     guy.lastDamageAmmount = damage;
     guy.lastDamageSource = source;
+    guy.grit += 0.005 * damage;
   }
 };
