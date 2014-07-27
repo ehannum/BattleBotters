@@ -22,14 +22,20 @@ var tests = {
     }
     return false;
   },
-  tookDamage: function () {
+  takeDamage: function () {
     if (guy.health < comparison.health) {
       return true;
     }
     return false;
   },
-  leveledUp: function () {
-    if (guy.level < comparison.level) {
+  attack: function () {
+    if (!attacked) {
+      return true;
+    }
+    return false;
+  },
+  levelUp: function () {
+    if (guy.level > comparison.level) {
       return true;
     }
     return false;

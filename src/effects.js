@@ -22,7 +22,7 @@ var effects = {
     }
   },
   levelUp: function () {
-    if (guy.exp > guy.level*11 && guy.level < 50) {
+    if (guy.exp >= guy.level*11 && guy.level < 50) {
       guy.level++;
       guy.exp = 0;
       guy.maxHealth += Math.floor(guy.grit);

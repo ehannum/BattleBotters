@@ -33,5 +33,14 @@ var reports = {
     }
     writeConsole(border);
     mapData[guy.position[0]][guy.position[1]] = oldTile;
+  },
+  botStats: function () {
+    writeConsole(guy.name.toUpperCase() + ': ' + getTimestamp() + ' character stats:');
+    writeConsole('Level: ' + guy.level);
+    writeConsole('Health: ' + guy.health + '/' + guy.maxHealth);
+    writeConsole('Mana: ' + guy.mana + '/' + guy.maxMana);
+    writeConsole('Brains: ' + Math.floor(guy.brains));
+    writeConsole('Brawn: ' + Math.floor(guy.brawn));
+    writeConsole('Grit: ' + Math.floor(guy.grit));
   }
 };
